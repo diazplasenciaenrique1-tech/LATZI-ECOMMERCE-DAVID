@@ -1,0 +1,376 @@
+{
+  "info": {
+    "_postman_id": "285a0119-f8eb-43e5-b003-fb3c0b05f534",
+    "name": "PLATZI ECOMMERCE DAVID",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60213385",
+    "_collection_link": "https://go.postman.co/collection/60213385-285a0119-f8eb-43e5-b003-fb3c0b05f534?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Registro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "const respuesta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Registro exitoso\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El usuario tiene un ID\", function () {\r",
+                  "    pm.expect(respuesta.id).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El nombre registrado es correcto\", function () {\r",
+                  "    pm.expect(respuesta.name).to.eql(\"Luis\");\r",
+                  "});\r",
+                  "\r",
+                  "if (pm.response.code === 201 && respuesta.id) {\r",
+                  "    pm.environment.set(\"user_id\", respuesta.id);\r",
+                  "    pm.environment.set(\"user_email\", respuesta.email);\r",
+                  "}\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"enrique123@gmail.com\",\r\n  \"name\": \"enrique\",\r\n  \"password\": \"segura111\",\r\n  \"role\": \"customer\",\r\n  \"avatar\": \"https://i.imgur.com/4M34hi2.png\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "const respuesta = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Login exitoso\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Se obtiene el token de acceso\", function () {\r",
+                  "    pm.expect(respuesta.access_token).to.be.a(\"string\").and.not.empty;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Se obtiene el token de renovación\", function () {\r",
+                  "    pm.expect(respuesta.refresh_token).to.be.a(\"string\").and.not.empty;\r",
+                  "});\r",
+                  "\r",
+                  "if (pm.response.code === 201 && respuesta.access_token) {\r",
+                  "    pm.environment.set(\"access_token\", respuesta.access_token);\r",
+                  "    pm.environment.set(\"refresh_token\", respuesta.refresh_token);\r",
+                  "    console.log(\"Tokens guardados correctamente\");\r",
+                  "}\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"alex123@gmail.com\",\r\n  \"password\": \"segura1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Agregar Producto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Producto creado correctamente\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "const producto = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"El producto tiene un ID\", function () {\r",
+                  "    pm.expect(producto.id).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El nombre es correcto\", function () {\r",
+                  "    pm.expect(producto.title).to.eql(\"Escritorio de madera\");\r",
+                  "});\r",
+                  "\r",
+                  "if (pm.response.code === 201 && producto.id) {\r",
+                  "    pm.environment.set(\"product_id\", producto.id);\r",
+                  "}\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n  \"title\": \"Silla gamer\",\r\n  \"price\": 500,\r\n  \"description\": \"Silla gamer para jugar\",\r\n  \"categoryId\": 1,\r\n  \"images\": [\r\n    \"https://placehold.co/600x400/png\"\r\n  ]\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consular Producto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "const producto = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Consulta exitosa\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El producto tiene un ID\", function () {\r",
+                  "    pm.expect(producto.id).to.exist;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El ID corresponde al producto creado\", function () {\r",
+                  "    const idGuardado = Number(pm.environment.get(\"product_id\"));\r",
+                  "    pm.expect(producto.id).to.eql(idGuardado);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El producto tiene nombre y precio\", function () {\r",
+                  "    pm.expect(producto.title).to.be.a(\"string\").and.not.empty;\r",
+                  "    pm.expect(producto.price).to.be.a(\"number\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El nombre del producto es correcto\", function () {\r",
+                  "    pm.expect(producto.title).to.eql(\"Silla Gamer\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El producto ya no existe\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "const producto = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Actualización exitosa\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El ID del producto es correcto\", function () {\r",
+                  "    const idGuardado = Number(pm.environment.get(\"product_id\"));\r",
+                  "    pm.expect(producto.id).to.eql(idGuardado);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El nombre fue actualizado\", function () {\r",
+                  "    pm.expect(producto.title).to.eql(\"Silla Gamer Pro\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"El precio fue actualizado\", function () {\r",
+                  "    pm.expect(producto.price).to.eql(650);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"La descripción fue actualizada\", function () {\r",
+                  "    pm.expect(producto.description).to.eql(\r",
+                  "        \"Silla gamer ergonómica con respaldo reclinable y soporte lumbar\"\r",
+                  "    );\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n  \"title\": \"Silla Gamer Pro\",\r\n  \"price\": 650,\r\n  \"description\": \"Silla gamer ergonómica con respaldo reclinable y soporte lumbar\",\r\n  \"categoryId\": 1,\r\n  \"images\": [\r\n    \"https://placehold.co/600x400/png\"\r\n  ]\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar un producto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"El producto ya no existe\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
